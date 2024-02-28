@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Epicare",
+  "description": "AI Plugin to better understand after-visit patient notes",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "js": ["scripts/scrape.js"],
+      "matches": [
+        "https://mychart.austinregionalclinic.com/*"
+      ],
+      "include_globs": ["*mychart*"]
+    }
+  ],
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "permissions": ["activeTab", "scripting", "sidePanel"],
+  "action": {
+    "default_popup": "popup/popup.html"
+  }
+}
