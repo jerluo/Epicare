@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Sidebar</title>
+<style>
+/* Styling for the sidebar */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    z-index: 999;
+}
+
+/* Styling for sidebar links */
+.sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+/* Styling for sidebar links on hover */
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+/* Styling for the close button */
+.closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+/* Styling for the button to open the sidebar */
+.openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 9999;
+}
+
+/* Styling for the content area */
+.main-content {
+    transition: margin-right 0.5s;
+    padding: 16px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- Button to open the sidebar -->
+<button class="openbtn" onclick="openNav()">Simpler notes with AI</button>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="#"></a>
+  <a href="#">About</a>
+  <a href="#">Services</a>
+  <a href="#">Contact</a>
+</div>
+
+<!-- Main content area -->
+<div class="main-content">
+  <h2>MyChart</h2>
+  <p>Patient results:</p>
+</div>
+
+<script>
+// Function to open the sidebar
+function openNav() {
+  document.getElementById("mySidebar").style.width = "250px";
+  document.getElementById("mySidebar").style.paddingRight = "10px"; // Adjust to make space for scrollbar if needed
+  document.getElementById("main").style.marginRight = "250px";
+}
+
+// Function to close the sidebar
+function closeNav() {
+  document.getElementById("mySidebar").style.width = "0";
+  document.getElementById("main").style.marginRight= "0";
+}
+</script>
+
+</body>
+</html>
 
