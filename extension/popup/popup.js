@@ -19,7 +19,7 @@ function createChatBubble(message, isUserMessage) {
       createChatBubble(message, true);
   
       // TODO: Gemini API call????
-      // For now, just put basic shit to emulate a response
+      // For now, just put basic stuff to emulate a response
       setTimeout(() => {
         // This is where the response from Google Gemini would be handled
         createChatBubble("Eppy's response will go here", false);
