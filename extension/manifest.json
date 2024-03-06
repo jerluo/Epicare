@@ -16,7 +16,7 @@
     "service_worker": "service-worker.js"
   },
   "permissions": ["activeTab", "scripting", "sidePanel"],
-  "action": {
-    "default_popup": "popup/popup.html"
+  "side_panel": {
+    "default_path": "popup/popup.html"
   }
 }
