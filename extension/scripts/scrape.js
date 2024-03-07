@@ -10,18 +10,34 @@ const dotenv = require('dotenv');
 dotenv.config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI);
 
+app.use(express.json());
 
-// checking for the element to see if it exists so it doesnt stop functioning.
-const fmtConvElement = document.querySelector(".fmtConv");
-if (fmtConvElement) {
-    // Pull the text from the data that is scraped from the above line after arriving at the element. 
-    const reportData = fmtConvElement.textContent;
-    console.log(reportData);
-} else {
-    console.error("Element with class 'fmtConv' not found.");
-}
-try {
-    alert('Inspect and look at console.');
-} catch (error) {
-    console.error("An error occurred:", error);
-}
+app.get('/', async (req, res) => {
+    try {
+	// Scraping website for data
+        // const fmtConvElement = document.querySelector(".fmtConv");
+        if(True) {
+            // const reportData = fmtConvElement.textContent;
+            const reportData = "What is the tallest building in the world?"
+	    console.log(reportData);
+	    
+	    const result = await genAI.getGenerativeModel({model : "gemini-pro" }).generateContent(reportData);
+
+	    const response = result.response.text();
+
+	    console.log(response);
+
+        } else {
+            console.error("Element with class 'fmtConv' not found.");
+	    res.status(404).send("Element not found")
+        }
+
+    } catch (error) {
+        console.error("There was an error when generating your summary.", error);
+	res.status(500).send("Internal Server Error");
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
+});
