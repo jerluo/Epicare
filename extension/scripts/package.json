@@ -4,9 +4,9 @@
   "description": "",
   "main": "scrape.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node index.js",
+    "client-build": "npm build --prefix ../client"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
