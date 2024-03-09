@@ -20,10 +20,10 @@ function createChatBubble(message, isUserMessage) {
   
       // TODO: Gemini API call????
       // For now, just put basic stuff to emulate a response
-      setTimeout(() => {
-        // This is where the response from Google Gemini would be handled
-        createChatBubble("Eppy's response will go here", false);
-      }, 1000);
+      gemini(message).then(data =>{
+        createChatBubble(data.response, false); 
+      });
+      
   
       // Clear the message input
       messageInput.value = '';
@@ -36,3 +36,26 @@ function createChatBubble(message, isUserMessage) {
     sendButton.addEventListener('click', handleSendButtonClick);
   });
   
+  async function gemini(message) {
+    const url = 'https://ebcc0a73c562e9.lhr.life'
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message,
+                history: ""
+            })
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+        return null; // or handle the error appropriately
+    }
+  }
