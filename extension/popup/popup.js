@@ -37,7 +37,7 @@ function createChatBubble(message, isUserMessage) {
   });
   
   async function gemini(message) {
-    const url = 'https://ebcc0a73c562e9.lhr.life'
+    const url = 'https://epicare.onrender.com/api'
     try {
         const response = await fetch(url, {
             method: 'POST',
