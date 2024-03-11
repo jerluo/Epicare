@@ -17,7 +17,7 @@ if (fmtConvElement) {
 
 document.querySelector("#summarize").addEventListener("click", (e) => {
     // scrape and send over
-    console.log('hi')
     // Pull the text from the data that is scraped from the above line after arriving at the element. 
     const reportData = fmtConvElement.textContent;
+    console.log(reportData)
 })

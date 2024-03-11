@@ -27,15 +27,24 @@ app.use((req, res, next) => {
     next();
 });
 
-app.post('/', async (req, res) => {
+app.post('/api', async (req, res) => {
     console.log(req.body);
-    const summary = await gemini(req.body.message, req.body.history);
-    console.log(summary);
-    res.json({response : summary});
+    
+
+    const message = req.body.message
+    const history = req.body.history
+    if (message && history) {
+        const summary = await gemini(req.body.message, req.body.history);
+        console.log(summary);
+        res.json({response : summary});
+    }
+
+    return res.send()
+    
 })
   
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Backend listening on port ${port}`)
 })
 
 async function gemini(message, history) {
