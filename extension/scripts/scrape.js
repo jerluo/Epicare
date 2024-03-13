@@ -11,13 +11,16 @@ if (fmtConvElement) {
         // Insert the new image after the existing content of the div
         assistiveiconDiv.insertAdjacentHTML('beforeend', newImageHTML);
     }
+
+    document.querySelector("#summarize").addEventListener("click", async (e) => {
+        // scrape and send over
+        // Pull the text from the data that is scraped from the above line after arriving at the element. 
+        const reportData = fmtConvElement.textContent;
+        console.log(reportData)
+
+        chrome.runtime.sendMessage({ target: 'popup', data: reportData });
+        //const response = await chrome.runtime.sendMessage({ action: 'runPopup', reportData })
+    })
     
     
 } 
-
-document.querySelector("#summarize").addEventListener("click", (e) => {
-    // scrape and send over
-    // Pull the text from the data that is scraped from the above line after arriving at the element. 
-    const reportData = fmtConvElement.textContent;
-    console.log(reportData)
-})

@@ -1,5 +1,12 @@
-chrome.storage.local.set({ history : [] }).then(() => {
-  console.log("Set chat history");
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  // Check if the message is intended for this script
+  if (message.target === 'popup') {
+    // Handle the received data
+    console.log(message.data)
+    gemini("Summarize these patient notes so that I can understand them: " + message.data).then(data =>{
+      createChatBubble(data.response, false); 
+    });
+  }
 });
 
 function createChatBubble(message, isUserMessage) {
@@ -51,7 +58,7 @@ async function gemini(message) {
           },
           body: JSON.stringify({
               message: message,
-              history: ""
+              history: "test"
           })
       });
       if (!response.ok) {
