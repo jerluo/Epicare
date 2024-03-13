@@ -17,7 +17,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI);
 app.use(express.json());
 
 app.use((req, res, next) => {
-    const allowedOrigins = ['chrome-extension://jjpaaigpmomkjelbgjoaobjfilgbkkbi'];
+    //const allowedOrigins = ['chrome-extension://jjpaaigpmomkjelbgjoaobjfilgbkkbi'];
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
@@ -30,11 +30,10 @@ app.use((req, res, next) => {
 app.post('/api', async (req, res) => {
     console.log(req.body);
     
-
     const message = req.body.message
     const history = req.body.history
     if (message && history) {
-        const summary = await gemini(req.body.message, req.body.history);
+        const summary = await gemini(message, history);
         console.log(summary);
         res.json({response : summary});
     }
@@ -48,6 +47,7 @@ app.listen(port, () => {
 })
 
 async function gemini(message, history) {
+    console.log("prompting gemini with ", message)
     const model = genAI.getGenerativeModel({ model: "gemini-pro"});
     const result = await model.generateContent(message);
     const response = result.response.text();
