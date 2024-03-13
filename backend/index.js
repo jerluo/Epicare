@@ -16,22 +16,17 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI);
 
 app.use(express.json());
 
-app.use(
-    cors({
-        origin: function (origin, callback) {
-          // Allow requests with no origin (like mobile apps or curl requests)
-          if (!origin) return callback(null, true);
-    
-          if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
-            return callback(new Error(msg), false);
-          }
-          return callback(null, true);
-        },
-      })
-);
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin.startsWith('chrome-extension://')) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
 
-app.post('/api', cors(), async (req, res) => {
+app.post('/api', async (req, res) => {
     console.log(req.body);
     
     const message = req.body.message
