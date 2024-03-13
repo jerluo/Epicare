@@ -39,7 +39,7 @@ document.querySelector("#summarize").addEventListener("click", async (e) => {
         } else {
             console.error('Error from backend', response.statusText);
         }
-    } catch {
+    } catch (error) {
         console.error('Error during fetch:', error)
 
     }
