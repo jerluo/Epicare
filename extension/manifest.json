@@ -17,6 +17,6 @@
   },
   "permissions": ["activeTab", "scripting", "sidePanel"],
   "side_panel": {
-    "default_path": "popup/popup.html"
+    "default_path": "sidepanel/sidepanel.html"
   }
 }

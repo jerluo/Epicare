@@ -8,29 +8,29 @@ html {
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+  font-size: medium;
 }
 
 .chatbot-panel {
   position: fixed;
   bottom: 0;
   right: 0;
-  width: 300px;
   background-color: #fff;
-  border: 1px solid #ddd;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .chatbot-header {
   background-color: #fac1c1;
-  color: white;
   padding: 10px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  text-align: center;
-  position: sticky;
-  top: 0px;
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+}
+
+
+.chatbot-messages {
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
 }
 
 .chatbot-header img {
@@ -52,6 +52,7 @@ body {
   border: 1px solid #ddd;
   border-radius: 5px;
   margin-right: 10px;
+  font-size: 16px;
 }
 
 .chatbot-input button {
@@ -61,6 +62,7 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
 }
 
 .chatbot-input button:hover {
@@ -95,21 +97,6 @@ body {
 }
 
 .eppy-message .message-bubble {
-  background-color: #d3d3d3;
-}
-
-.chatbot-messages::-webkit-scrollbar {
-  width: 5px;
-}
-
-.chatbot-messages::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.chatbot-messages::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-.chatbot-messages::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background-color: #e6dfdf;
+  color: black;
 }
