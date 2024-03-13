@@ -17,7 +17,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI);
 app.use(express.json());
 
 app.use((req, res, next) => {
-    //const allowedOrigins = ['chrome-extension://jjpaaigpmomkjelbgjoaobjfilgbkkbi'];
+    const allowedOrigins = ['chrome-extension://'];
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
