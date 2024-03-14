@@ -46,7 +46,7 @@ function createChatBubble(message, isUserMessage) {
             },
             body: JSON.stringify({
                 message: message,
-                history: ""
+                history: "test"
             })
         });
         if (!response.ok) {
