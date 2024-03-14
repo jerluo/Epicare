@@ -7,7 +7,8 @@
     {
       "js": ["scripts/scrape.js"],
       "matches": [
-        "https://mychart.austinregionalclinic.com/*"
+        "https://mychart.austinregionalclinic.com/*",
+        "https://wimychart.ascension.org/"
       ],
       "include_globs": ["*mychart*"]
     }

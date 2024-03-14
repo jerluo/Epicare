@@ -16,11 +16,30 @@ if (fmtConvElement) {
         // scrape and send over
         // Pull the text from the data that is scraped from the above line after arriving at the element. 
         const reportData = fmtConvElement.textContent;
-        console.log(reportData)
+        // Adding the prompt so easy to just plugin to AI
+        const prompt = "Can you summarize the notes below: \n" + reportData;
+        console.log(prompt);
+        // Trying to send POST Request to backend in
+        try {
+            // Need to add backend endpoint
+            const response = await fetch ('https://epicare.onrender.com/api', {
+                method: "POST",
+                headers: {
+                    'Content-Type' : "application/json",
 
-        chrome.runtime.sendMessage({ target: 'popup', data: reportData });
-        //const response = await chrome.runtime.sendMessage({ action: 'runPopup', reportData })
-    })
-    
-    
+                },
+                body: JSON.stringify({message: prompt, history: "test"}),
+            });
+            if (response.ok) {
+                const result = await response.json();
+                console.log("Summary: \n", result);
+                chrome.runtime.sendMessage({ target: 'sidepanel', data: reportData });
+            } else {
+                console.error('Error from backend', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error during fetch:', error)
+        }
+        
+    })  
 } 
