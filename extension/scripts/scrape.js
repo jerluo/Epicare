@@ -25,13 +25,13 @@ document.querySelector("#summarize").addEventListener("click", async (e) => {
     // Trying to send POST Request to backend in
     try {
         // Need to add backend endpoint
-        const response = await fetch ('backend endpoint', {
+        const response = await fetch ('https://epicare.onrender.com/api', {
             method: "POST",
             headers: {
                 'Content-Type' : "application/json",
 
             },
-            body: JSON.stringify({prompt}),
+            body: JSON.stringify({message: prompt, history: "test"}),
         });
         if (response.ok) {
             const result = await response.json();
