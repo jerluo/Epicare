@@ -15,8 +15,8 @@
   "background": {
     "service_worker": "service-worker.js"
   },
-  "permissions": ["activeTab", "scripting", "sidePanel", "storage"],
-  "action": {
-    "default_popup": "popup/popup.html"
+  "permissions": ["activeTab", "scripting", "sidePanel"],
+  "side_panel": {
+    "default_path": "sidepanel/sidepanel.html"
   }
 }
