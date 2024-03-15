@@ -4,39 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chatbot Button</title>
-  <style>
-    
-    #chatbotContainer {
-      position: fixed;
-      bottom: 100px; 
-      right: 20px;
-      background-color: #fff; /* white background color */
-      border: 1px solid #ddd; /* gray border */
-      border-radius: 10px; /* bubble corners */
-      padding: 20px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* shadow from the button */
-      z-index: 9998;
-    }
-
-    /* close button */
-    #closeChatbotButton {
-      background-color: #ccc; /*  gray background  */
-      color: #333; 
-      border: none;
-      border-radius: 5px; /* bubble corners */
-      padding: 5px 10px; 
-      cursor: pointer;
-    }
-
-    #closeChatbotButton:hover {
-      background-color: #bbb; 
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="styles.css"> <!-- Link to external CSS file -->
 </head>
 <body>
 
 <!-- Button image to open the chatbot -->
-<img id="chatbotButton" src="icon16.png" alt="Chat" style="position: fixed; bottom: 20px; right: 20px; cursor: pointer; z-index: 9999;">
+<img id="chatbotButton" src="icon16.png" alt="Chat" class="chatbot-button">
 
 <!-- Chatbot container (hidden by default) -->
 <div id="chatbotContainer" style="display: none;">
