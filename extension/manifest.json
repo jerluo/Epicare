@@ -7,7 +7,7 @@
     {
       "js": ["scripts/scrape.js"],
       "matches": [
-        "https://mychart.austinregionalclinic.com/*"
+        "https://mychart.ssmhc.com/mychart/Authentication/Login?/*"
       ],
       "include_globs": ["*mychart*"]
     }
