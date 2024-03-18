@@ -3,11 +3,28 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.target === 'popup') {
     // Handle the received data
     console.log(message.data)
-    gemini("Summarize these patient notes so that I can understand them: " + message.data).then(data => {
-      createChatBubble(data.response, false);
+    gemini("Can you summarize these notes in bullet points? Bold each section: " + message.data).then(data => {
+      // Add a line break before each bold section
+      const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong>$1</strong>');
+
+      const formattedResponse = boldedResponse.replace(/<\/strong>/g, '</strong><br>');
+      
+      // Create chat bubble with the modified (bolded) response
+      createChatBubble(formattedResponse, false);
     });
   }
 });
+
+
+
+// Function to decode HTML entities
+function decodeHtmlEntities(html) {
+    return html.replace(/&lt;/g, '<')
+               .replace(/&gt;/g, '>')
+               .replace(/&quot;/g, '"')
+               .replace(/&#039;/g, "'")
+               .replace(/&amp;/g, '&');
+}
 
 function createChatBubble(message, isUserMessage) {
   const chatMessage = document.createElement('div');
@@ -16,7 +33,12 @@ function createChatBubble(message, isUserMessage) {
 
   const messageBubble = document.createElement('div');
   messageBubble.classList.add('message-bubble');
-  messageBubble.textContent = message;
+
+  // Set innerHTML instead of textContent to render HTML tags
+  messageBubble.innerHTML = message;
+
+  console.log(messageBubble);
+
   chatMessage.appendChild(messageBubble);
   document.getElementById('chat-container').appendChild(chatMessage);
 
