@@ -2,19 +2,31 @@ chrome.runtime.onInstalled.addListener(() => {
   console.log("loaded background");
 })
 
+chrome.action.onClicked.addListener((tab) => {
+  chrome.windows.getCurrent(async window => {
+    chrome.sidePanel.open({
+      windowId: window.id
+    });
+  });
+});
+
 // use chrome.action.runPopup()
 // initialize the storage
-chrome.runtime.onMessage.addListener(async function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   console.log(sender.tab ?
     "from a content script:" + sender.tab.url :
     "from the extension");
-  if (request.action === 'runPopup') {
-    console.log("running popup")
-    const result = initializeStorage();
-    chrome.window.open("popup/popup.html", "extension_popup", "width=300,height=400,status=no,scrollbars=yes,resizable=no");
-
-    //await chrome.action.setPopup({popup: 'popup/popup.html'});
-    sendResponse({ result });
+  if (request.action === 'open-sidepanel') {
+    console.log("running side panel")
+    
+    chrome.windows.getCurrent(async window => {
+      await chrome.sidePanel.open({
+        windowId: window.id
+      });
+      sendResponse({opened : true});
+    });
+      
+    return true
   }
 });
 

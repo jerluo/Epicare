@@ -13,6 +13,7 @@
       "include_globs": ["*mychart*"]
     }
   ],
+  "action": {},
   "background": {
     "service_worker": "service-worker.js"
   },

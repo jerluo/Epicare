@@ -16,11 +16,17 @@ if (fmtConvElement) {
         // scrape and send over
         // Pull the text from the data that is scraped from the above line after arriving at the element. 
         const reportData = fmtConvElement.textContent;
-        console.log(reportData)
 
-        chrome.runtime.sendMessage({ target: 'popup', data: reportData });
-        //const response = await chrome.runtime.sendMessage({ action: 'runPopup', reportData })
+        // Open the side panel
+        await chrome.runtime.sendMessage({action: "open-sidepanel"});
+
+        // Need to wait a little for listener in side panel to start (i know bad practice to just sleep but idc)
+        // Then send data over
+        setTimeout(() => {
+            console.log("Delayed for 1 second.");
+            console.log("sending to popup")
+            chrome.runtime.sendMessage({ target: 'popup', data: reportData });
+        }, 1000);
+            
     })
-    
-    
 } 
