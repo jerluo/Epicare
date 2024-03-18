@@ -7,11 +7,14 @@
     {
       "js": ["scripts/scrape.js"],
       "matches": [
-        "https://mychart.austinregionalclinic.com/*"
+        "https://mychart.austinregionalclinic.com/*",
+        "https://wimychart.ascension.org/*",
+        "https://mychart.ssmhc.com/*"
       ],
       "include_globs": ["*mychart*"]
     }
   ],
+  "action": {},
   "background": {
     "service_worker": "service-worker.js"
   },
@@ -23,5 +26,8 @@
     "16": "./images/Icon16.png",
     "48": "./images/Icon48.png",
     "128": "./images/Icon128.png"
+  },
+  "side_panel": {
+    "default_path": "sidepanel/sidepanel.html"
   }
 }
