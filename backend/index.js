@@ -50,6 +50,8 @@ async function gemini(message, history) {
         const response = result.response.text();
         return response;
     } catch (error) {
+        console.log("message: " + error.message)
+        console.log("status" + error.status)
         if (error.status === 503) {
           return "Model overloaded, please try again later.";
         } else {
