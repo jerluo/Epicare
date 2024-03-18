@@ -3,7 +3,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.target === 'popup') {
     // Handle the received data
     console.log(message.data)
-    gemini("Can you summarize these notes in bullet points? Bold each section: " + message.data).then(data => {
+    gemini("Can you succinctly summarize these notes in bullet points? Bold each section: " + message.data).then(data => {
       // Add a line break before each bold section
       const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong>$1</strong>');
 
@@ -65,12 +65,14 @@ function handleSendButtonClick() {
   if (message) {
     createChatBubble(message, true);
 
-    // TODO: Gemini API call????
-    // For now, just put basic stuff to emulate a response
-    gemini(message).then(data => {
-      createChatBubble(data.response, false);
-    });
+    const prompt = "You are chat bot named Eppy answering a question from a patient about a specific question pertaining to their health, answer succinctly and assume the patient is 5 : " + message;
+    gemini(prompt).then(data => {
+      // Add a line break before each bold section
+      const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong>$1</strong>');
 
+      const formattedResponse = boldedResponse.replace(/<\/strong>/g, '</strong><br>');
+      createChatBubble(formattedResponse, false);
+    });
 
     // Clear the message input
     messageInput.value = '';
@@ -81,6 +83,8 @@ function handleSendButtonClick() {
 document.addEventListener('DOMContentLoaded', () => {
   const sendButton = document.getElementById('send-button');
   sendButton.addEventListener('click', handleSendButtonClick);
+  const welcomeChat = "Hi there! I'm Eppy, and I'm here to answer any questions you may have about your health. Let's chat!"
+  createChatBubble(welcomeChat, false);
 });
 
 async function gemini(message) {

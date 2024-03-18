@@ -21,9 +21,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.post('/api', async (req, res) => {
-    console.log(req.body);
-    
+app.post('/api', async (req, res) => {    
     const message = req.body.message
     const history = req.body.history
     if (message && history) {
