@@ -5,14 +5,22 @@ const fmtConvElement = document.querySelector(".fmtConv");
 if (fmtConvElement) {
     const assistiveiconDiv = document.getElementById('assistiveicons');
     if (assistiveiconDiv) {
-        document.querySelector('.assistiveicon').style.float = 'left';
+        // Create a container div
+        const containerDiv = document.createElement('div');
+        containerDiv.style.display = 'flex'; // Ensure flex display for proper alignment
+        containerDiv.style.alignItems = 'center'; // Center align items vertically
+        containerDiv.style.justifyContent = 'flex-end'; // Align items to the right
+        
         // Define the HTML for the new image
-        const newImageHTML = ' <div id="summarize" style="display: inline width: 34px; height: 40px;"> <img src="https://i.postimg.cc/d3R9ZbT4/bot-Profile.png" alt="Confused?" width="34" height="38"title="Click to summarize notes"style="cursor: pointer;"> </div>'
-        // Insert the new image after the existing content of the div
-        assistiveiconDiv.insertAdjacentHTML('beforeend', newImageHTML);
+        const newImageHTML = '<img id="summarize" src="https://i.postimg.cc/d3R9ZbT4/bot-Profile.png" alt="Confused?" width="50" height="50" title="Click to summarize notes" style="cursor: pointer;">';
+        // Insert the new image into the container div
+        containerDiv.innerHTML = newImageHTML;
+        
+        // Insert the container div after the existing content of the assistiveiconDiv
+        assistiveiconDiv.parentNode.insertBefore(containerDiv, assistiveiconDiv.nextSibling);
     }
 
-    document.querySelector("#summarize").addEventListener("click", async (e) => {
+    document.getElementById("summarize").addEventListener("click", async (e) => {
         // scrape and send over
         // Pull the text from the data that is scraped from the above line after arriving at the element. 
         const reportData = fmtConvElement.textContent;
