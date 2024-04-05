@@ -11,7 +11,6 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 // use chrome.action.runPopup()
-// initialize the storage
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   console.log(sender.tab ?
     "from a content script:" + sender.tab.url :
@@ -28,12 +27,31 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       
     return true
   }
+
+  if (request.action === 'get-history') {
+    console.log("getting chat history")
+    chrome.storage.session.get(['history'], function(result) {
+      if (result.history) {
+        console.log('History retrieved from session storage:', result.history);
+        sendResponse({history : history})
+      } 
+      // Initialize history
+      else {
+        console.log('No history found in session storage');
+        const history = [];
+        history.push({
+          "role": "model",
+          "parts":"Hi there! I'm Eppy, and I'm here to answer any questions you may have about your health. Let's chat!"
+        }) 
+        console.log(history)
+        sendResponse({history : history})
+      }
+    });
+    return true
+  }
 });
 
-function initializeStorage() {
-  chrome.storage.local.set({ history : [] }).then(() => {
-    console.log("Set chat history");
-  });
+async function getHistory() {
   
-  return 'storage initialized';
+
 }

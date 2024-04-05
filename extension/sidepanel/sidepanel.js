@@ -80,11 +80,17 @@ function handleSendButtonClick() {
 }
 
 // Attach the event listener to the send button
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const sendButton = document.getElementById('send-button');
   sendButton.addEventListener('click', handleSendButtonClick);
-  const welcomeChat = "Hi there! I'm Eppy, and I'm here to answer any questions you may have about your health. Let's chat!"
-  createChatBubble(welcomeChat, false);
+
+  const response = await chrome.runtime.sendMessage({action: "get-history"});
+  const history = response.history
+
+  history.forEach(({ role, parts }) => {
+    const isUser = role === 'user';
+    createChatBubble(parts, isUser);
+  });
 });
 
 async function gemini(message) {
