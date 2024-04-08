@@ -11,6 +11,10 @@ body {
   font-size: medium;
 }
 
+#chat-container {
+  display: inline-block;
+}
+
 .chatbot-panel {
   position: fixed;
   bottom: 0;
@@ -69,6 +73,12 @@ body {
 
 .chatbot-input button:hover {
   background-color: #e60049;
+}
+
+.chat-profile {
+  max-width: 15%;
+  height: auto;
+  clip-path: circle(40%);
 }
 
 .chat-message {

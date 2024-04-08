@@ -14,19 +14,16 @@
       "include_globs": ["*mychart*"]
     }
   ],
-  "action": {},
-  "background": {
-    "service_worker": "service-worker.js"
-  },
-  "permissions": ["activeTab", "scripting", "sidePanel"],
-  "action": {
-    "default_popup": "popup/popup.html"
-  },
   "icons": {
     "16": "./images/Icon16.png",
     "48": "./images/Icon48.png",
     "128": "./images/Icon128.png"
   },
+  "action": {},
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "permissions": ["activeTab", "scripting", "sidePanel", "storage"],
   "side_panel": {
     "default_path": "sidepanel/sidepanel.html"
   }
