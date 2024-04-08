@@ -26,26 +26,43 @@ function decodeHtmlEntities(html) {
                .replace(/&amp;/g, '&');
 }
 
-function createChatBubble(message, isUserMessage) {
+function createChatBubble(message, isUserMessage, isLoading = false) {
   const chatMessage = document.createElement('div');
   chatMessage.classList.add('chat-message');
-  chatMessage.classList.add(isUserMessage ? 'user-message' : 'eppy-message');
-
+  
   const messageBubble = document.createElement('div');
   messageBubble.classList.add('message-bubble');
 
-  // Set innerHTML instead of textContent to render HTML tags
-  messageBubble.innerHTML = message;
-
-  console.log(messageBubble);
+  if (isLoading) {
+    chatMessage.classList.add('loading-message');
+    messageBubble.innerHTML = `
+      <div class="typing-animation">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      </div>`; // For animation, include three span elements
+  } else {
+    chatMessage.classList.add(isUserMessage ? 'user-message' : 'eppy-message');
+    messageBubble.innerHTML = message;
+  }
 
   chatMessage.appendChild(messageBubble);
   document.getElementById('chat-container').appendChild(chatMessage);
-
+  
   // Scroll to the bottom of the chat container
-  let messages = document.getElementById("chat-container");
-  messages.scrollTop = messages.scrollHeight;
+  document.getElementById("chat-container").scrollTop = chatMessage.offsetTop;
 }
+
+
+
+
+function toggleLoadingMessage(show) {
+  const loadingBubbleExists = document.querySelector('.loading-message');
+  if (show && !loadingBubbleExists) {
+    createChatBubble('', false, true); // Pass true to indicate it's a loading message
+  } else if (!show && loadingBubbleExists) {
+    loadingBubbleExists.remove(); // Remove the loading message when not needed
+  }
+}
+
 
 // logic for adding "pressing enter" functionality to the input field
 let input = document.getElementById("message-input");
@@ -80,33 +97,46 @@ function handleSendButtonClick() {
 }
 
 // Attach the event listener to the send button
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const sendButton = document.getElementById('send-button');
   sendButton.addEventListener('click', handleSendButtonClick);
-  const welcomeChat = "Hi there! I'm Eppy, and I'm here to answer any questions you may have about your health. Let's chat!"
-  createChatBubble(welcomeChat, false);
+
+  const response = await chrome.runtime.sendMessage({action: "get-history"});
+  const history = response.history
+
+  history.forEach(({ role, parts }) => {
+    const isUser = role === 'user';
+    createChatBubble(parts, isUser);
+  });
 });
 
 async function gemini(message) {
-  const url = 'https://epicare.onrender.com/api'
+  const url = 'https://epicare.onrender.com/api';
+  // Show the loading message as a chat bubble
+  toggleLoadingMessage(true);
+  
   try {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        message: message,
-        history: "test"
-      })
+      body: JSON.stringify({ message: message, history: "test" })
     });
+
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
+
     const data = await response.json();
     return data;
+    
   } catch (error) {
     console.error('Error:', error);
-    return null; // or handle the error appropriately
+    return null;
+    
+  } finally {
+    // Hide the loading message
+    toggleLoadingMessage(false);
   }
 }
