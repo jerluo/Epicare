@@ -96,6 +96,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .user-message .message-bubble {
