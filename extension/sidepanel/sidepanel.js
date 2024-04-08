@@ -3,7 +3,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.target === 'popup') {
     // Handle the received data
     console.log(message.data)
-    gemini("Can you succinctly summarize these notes in bullet points? Bold each section: " + message.data).then(data => {
+    gemini("Can you succinctly summarize these notes by bolding each section and explaining the details in bullet point? Here is the notes:" + message.data).then(data => {
       // Add a line break before each bold section
       const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong>$1</strong>');
 
