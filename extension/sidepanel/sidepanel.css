@@ -76,7 +76,7 @@ body {
 
 .chat-profile {
   float: left;
-  max-width: 60px;
+  max-width: 50px;
   height: auto;
   clip-path: circle(40%);
 }
