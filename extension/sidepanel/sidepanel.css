@@ -4,7 +4,6 @@ html {
   overflow: auto;
 }
 
-
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -76,7 +75,8 @@ body {
 }
 
 .chat-profile {
-  max-width: 15%;
+  float: left;
+  max-width: 60px;
   height: auto;
   clip-path: circle(40%);
 }
@@ -133,9 +133,9 @@ body {
 
 .user-message .message-bubble:before {
   border-color: transparent transparent transparent #cf013b; /* Adjust color for user message */
-  left: 0;
-  bottom: -5px;
-  transform: rotate(-45deg) translate(50%, 50%); /* Rotate and translate the tail */
+  right: -5px;
+  top: 10px;
+  transform: rotate(-135deg) translate(50%, 50%); /* Rotate and translate the tail */
 }
 
 .eppy-message .message-bubble:before {
@@ -146,9 +146,9 @@ body {
   border-style: solid;
   border-width: 10px;
   border-color: transparent #e6dfdf transparent transparent; /* Adjust color for Gemini message */
-  right: 0; /* Position the tail at the end of the bubble */
-  bottom: -5px; /* Adjust the position to start lower than prompt */
-  transform: rotate(45deg) translate(-50%, 50%); /* Rotate and translate the tail */
+  left: -5px; /* Position the tail at the start of the bubble */
+  top: 15px; /* Adjust the position to start higher than prompt */
+  transform: rotate(135deg) translate(-50%, 50%); /* Rotate and translate the tail */
 }
 
 /* Styling for the loading message bubble */
