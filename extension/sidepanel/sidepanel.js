@@ -4,9 +4,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     // Handle the received data
     console.log(message.data)
     gemini("Can you succinctly summarize these notes by bolding each section and explaining the details in bullet point? Here is the notes:" + message.data).then(data => {
-      // Add a line break before each bold section
+      // This line creates the bolded font within the chat bubble
       const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong>$1</strong>');
-
+      
+      // This isn't needed for the new scrollable chatbubbles
       const formattedResponse = boldedResponse.replace(/<\/strong>/g, '</strong><br>');
       
       // Create chat bubble with the modified (bolded) response
