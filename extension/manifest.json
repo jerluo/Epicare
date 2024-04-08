@@ -14,6 +14,11 @@
       "include_globs": ["*mychart*"]
     }
   ],
+  "icons": {
+    "16": "./images/Icon16.png",
+    "48": "./images/Icon48.png",
+    "128": "./images/Icon128.png"
+  },
   "action": {},
   "background": {
     "service_worker": "service-worker.js"

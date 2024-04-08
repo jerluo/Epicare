@@ -30,6 +30,13 @@ function decodeHtmlEntities(html) {
 function createChatBubble(message, isUserMessage, isLoading = false) {
   const chatMessage = document.createElement('div');
   chatMessage.classList.add('chat-message');
+
+  const botProfileImg = document.createElement('img');
+  if(!isUserMessage) {
+    botProfileImg.src = "../images/botProfile.png";
+    botProfileImg.alt = "Profile Picture of Eppy the Chatbot";
+    botProfileImg.classList.add('chat-profile');
+  }
   
   const messageBubble = document.createElement('div');
   messageBubble.classList.add('message-bubble');
@@ -45,6 +52,10 @@ function createChatBubble(message, isUserMessage, isLoading = false) {
     messageBubble.innerHTML = message;
   }
 
+  
+  if(!isUserMessage && !isLoading){
+    document.getElementById('chat-container').appendChild(botProfileImg);
+  }
   chatMessage.appendChild(messageBubble);
   document.getElementById('chat-container').appendChild(chatMessage);
   
