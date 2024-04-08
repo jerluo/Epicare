@@ -23,14 +23,16 @@ body {
   background-color: #fac1c1;
   padding: 10px;
   position: fixed;
+  top: 0; /* Add this to ensure the header starts at the top */
   width: 100%;
   z-index: 100;
 }
 
 
 .chatbot-messages {
-  max-height: calc(100vh - 150px);
+  max-height: calc(100vh - 150px - 20px); /* Subtract the header's height including padding */
   overflow-y: auto;
+  padding-top: 60px;
 }
 
 .chatbot-header img {
@@ -137,4 +139,53 @@ body {
   right: 0; /* Position the tail at the end of the bubble */
   bottom: -5px; /* Adjust the position to start lower than prompt */
   transform: rotate(45deg) translate(-50%, 50%); /* Rotate and translate the tail */
+}
+
+/* Styling for the loading message bubble */
+.loading-message .message-bubble {
+  background-color: #e6dfdf; 
+  border-radius: 18px; 
+  padding: 10px 20px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 70%; 
+  margin-left: 10px;
+  margin-right: auto;
+}
+
+.loading-message .message-bubble:before {
+  display: none;
+}
+
+.typing-animation {
+  width: 30px; /* Set a max-width that holds all three dots */
+  display: flex;
+  justify-content: space-around;
+}
+
+.typing-animation .dot {
+  background-color: black; /* Dot color */
+  border-radius: 50%;
+  width: 6px; /* Dot size */
+  height: 6px; /* Dot size */
+  animation: typing 1.5s infinite;
+}
+
+.typing-animation .dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.typing-animation .dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typing-animation .dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+
+@keyframes typing {
+  0%, 100% { opacity: 0; }
+  60% { opacity: 1; }
 }
