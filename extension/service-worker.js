@@ -28,30 +28,53 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     return true
   }
 
-  if (request.action === 'get-history') {
-    console.log("getting chat history")
-    chrome.storage.session.get(['history'], function(result) {
-      if (result.history) {
-        console.log('History retrieved from session storage:', result.history);
-        sendResponse({history : history})
-      } 
-      // Initialize history
-      else {
-        console.log('No history found in session storage');
-        const history = [];
-        history.push({
-          "role": "model",
-          "parts":"Hi there! I'm Eppy, and I'm here to answer any questions you may have about your health. Let's chat!"
-        }) 
-        console.log(history)
-        sendResponse({history : history})
+  if (request.action === 'get-history') { 
+    
+    getHistory().then((history) => {
+      sendResponse({history : history})
+    })
+
+    return true
+  }
+
+  if (request.action === 'set-history') {
+    console.log('setting new chat history')
+    const person = request.user ? "user" : "model"
+    const newHistory = 
+      {
+        "role": person,
+        "parts": request.parts
       }
-    });
+
+    getHistory().then((history) => {
+      history.push(newHistory);
+      chrome.storage.session.set({ history: history }).then(() => {
+        console.log("History is set");
+      });
+    })
+
     return true
   }
 });
 
 async function getHistory() {
+  const result = await chrome.storage.session.get(['history'])
+   
+  if (result.history) {
+    console.log('History retrieved from session storage:', result.history);
+    return result.history
+  } 
+  // Initialize history
+  else {
+    console.log('No history found in session storage');
+    const history = [];
+    history.push({
+      "role": "model",
+      "parts":"Hi there! I'm Eppy, and I'm here to answer any questions you may have about your health. Let's chat!"
+    }) 
+    console.log(history)
+    chrome.storage.session.set({ history: history })
+    return history
+  }
   
-
 }

@@ -21,11 +21,14 @@ app.use((req, res, next) => {
     next();
 });
 
-app.post('/api', async (req, res) => {    
-    const message = req.body.message
-    const history = req.body.history
-    if (message && history) {
-        const summary = await gemini(message, history);
+app.post('/chat', async (req, res) => {    
+
+    const prompt = "You are chat bot named Eppy answering a question from a patient about a specific question pertaining to their health, answer succinctly and assume the patient is 5 : ";
+
+    if (req.body.message && req.body.history) {
+        const message = req.body.message
+        const history = req.body.history
+        const summary = await gemini(prompt + message, history);
         console.log(summary);
         res.json({response : summary});
     } else {
@@ -33,7 +36,23 @@ app.post('/api', async (req, res) => {
     }
 
     return res.send()
-    
+})
+
+app.post('/summary', async (req, res) => {    
+
+    const prompt = "Can you succinctly summarize these notes by bolding each section and explaining the details in bullet point? Here is the notes: "
+
+    if (req.body.message && req.body.history) {
+        const message = req.body.message
+        const history = req.body.history
+        const summary = await gemini(prompt + message, history);
+        console.log(summary);
+        res.json({response : summary});
+    } else {
+        res.sendStatus(400)
+    }
+
+    return res.send()
 })
   
 app.listen(port, () => {

@@ -3,7 +3,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.target === 'popup') {
     // Handle the received data
     console.log(message.data)
-    gemini("Can you succinctly summarize these notes by bolding each section and explaining the details in bullet point? Here is the notes:" + message.data).then(data => {
+    gemini(message.data, 'summary').then(data => {
       // This line creates the bolded font within the chat bubble
       const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong style="font-size: 18px;"><u>$1</u></strong>');
       
@@ -83,12 +83,11 @@ function handleSendButtonClick() {
   if (message) {
     createChatBubble(message, true);
 
-    const prompt = "You are chat bot named Eppy answering a question from a patient about a specific question pertaining to their health, answer succinctly and assume the patient is 5 : " + message;
-    gemini(prompt).then(data => {
+    gemini(message, 'chat').then(data => {
       // Add a line break before each bold section
       const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong>$1</strong>');
-
       const formattedResponse = boldedResponse.replace(/<\/strong>/g, '</strong><br>');
+      chrome.runtime.sendMessage({action: "set-history", user: false, parts: formattedResponse});
       createChatBubble(formattedResponse, false);
     });
 
@@ -111,10 +110,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 });
 
-async function gemini(message) {
-  const url = 'https://epicare.onrender.com/api';
+async function gemini(message, path) {
+  const url = 'https://epicare.onrender.com/';
+  
+  const endpoint = url + path
   // Show the loading message as a chat bubble
   toggleLoadingMessage(true);
+  // Set to history user message
+  chrome.runtime.sendMessage({action: "set-history", user: true, parts: message});
   
   try {
     const response = await fetch(url, {
