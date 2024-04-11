@@ -21,38 +21,32 @@ app.use((req, res, next) => {
     next();
 });
 
-app.post('/chat', async (req, res) => {    
 
-    const prompt = "You are chat bot named Eppy answering a question from a patient about a specific question pertaining to their health, answer succinctly and assume the patient is 5 : ";
+app.post('/api', async (req, res) => {    
+    const { operation, message, history } = req.body;
 
-    if (req.body.message && req.body.history) {
-        const message = req.body.message
-        const history = req.body.history
-        const summary = await gemini(prompt + message, history);
-        console.log(summary);
-        res.json({response : summary});
-    } else {
-        res.sendStatus(400)
+    if (!message || !history) {
+        return res.status(400).json({ error: 'Missing required parameters' });
     }
 
-    return res.send()
-})
+    const summaryPrompt = "Can you succinctly summarize these notes by bolding each section and explaining the details in bullet point? Here is the notes: "
+    const chatPrompt = "You are chat bot named Eppy answering a question from a patient about a specific question pertaining to their health, answer succinctly and assume the patient is 5 : ";
 
-app.post('/summary', async (req, res) => {    
-
-    const prompt = "Can you succinctly summarize these notes by bolding each section and explaining the details in bullet point? Here is the notes: "
-
-    if (req.body.message && req.body.history) {
-        const message = req.body.message
-        const history = req.body.history
-        const summary = await gemini(prompt + message, history);
-        console.log(summary);
-        res.json({response : summary});
-    } else {
-        res.sendStatus(400)
+    let response
+    switch (operation) {
+        case 'chat':
+          const chatPrompt = "You are chat bot named Eppy answering a question from a patient about a specific question pertaining to their health, answer succinctly and assume the patient is 5 : ";
+          response = await gemini(chatPrompt + message, history);
+          break;
+        case 'summary':
+          const summaryPrompt = "Can you succinctly summarize these notes by bolding each section and explaining the details in bullet point? Here is the notes: ";
+          response = await gemini(summaryPrompt + message, history);
+          break;
+        default:
+          return res.status(400).json({ error: 'Invalid operation' });
     }
 
-    return res.send()
+    return res.json({ response: response });
 })
   
 app.listen(port, () => {
@@ -63,17 +57,18 @@ async function gemini(message, history) {
     console.log("prompting gemini")
     const model = genAI.getGenerativeModel({ model: "gemini-pro"});
     try {
-        const result = await model.generateContent(message);
-        const response = result.response.text();
-        return response;
+        const chat = model.startChat({
+            history: history,
+        });
+                
+        const result = await chat.sendMessage(message);
+        const response = await result.response;
+        return response.text();
+
     } catch (error) {
-        console.log("message: " + error.message)
-        console.log("status" + error.status)
-        if (error.status === 503) {
-          return "Model overloaded, please try again later.";
-        } else {
-          console.error("An error occurred:", error);
-          return "An error occurred while generating the response. Please try again later.";
-        }
+        console.log("message: " + error.message)        
+        console.error("An error occurred:", error);
+        return error.message;
+        
     }
 }

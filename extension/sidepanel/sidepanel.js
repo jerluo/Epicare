@@ -121,22 +121,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 });
 
-async function gemini(message, path) {
-  const url = 'https://epicare.onrender.com/';
+async function gemini(message, operation) {
+  const url = 'https://epicare.onrender.com/api';
+  const endpoint = url
   
-  const endpoint = url + path
+  // Get current history
+  const response = await chrome.runtime.sendMessage({action: "get-history"});
+  const history = response.history
+
   // Show the loading message as a chat bubble
   toggleLoadingMessage(true);
   // Set to history user message
   chrome.runtime.sendMessage({action: "set-history", user: true, parts: message});
   
   try {
-    const response = await fetch(url, {
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message: message, history: "test" })
+      body: JSON.stringify({ message: message, history: history, operation: operation })
     });
 
     if (!response.ok) {
