@@ -115,6 +115,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const response = await chrome.runtime.sendMessage({action: "get-history"});
   const history = response.history
 
+  // Initial welcome message
+  createChatBubble("Hi there! I'm Eppy, and I'm here to answer any questions you may have about your health. Let's chat!", false);
+
   history.forEach(({ role, parts }) => {
     const isUser = role === 'user';
     createChatBubble(parts, isUser);
@@ -134,6 +137,7 @@ async function gemini(message, operation) {
   // Set to history user message
   chrome.runtime.sendMessage({action: "set-history", user: true, parts: message});
   
+  console.log("sending history: " + JSON.stringify(history))
   try {
     const response = await fetch(endpoint, {
       method: 'POST',

@@ -55,6 +55,7 @@ app.listen(port, () => {
 
 async function gemini(message, history) {
     console.log("prompting gemini")
+    console.log(history)
     const model = genAI.getGenerativeModel({ model: "gemini-pro"});
     try {
         const chat = model.startChat({

@@ -66,15 +66,8 @@ async function getHistory() {
   } 
   // Initialize history
   else {
-    console.log('No history found in session storage');
-    const history = [];
-    history.push({
-      "role": "model",
-      "parts":"Hi there! I'm Eppy, and I'm here to answer any questions you may have about your health. Let's chat!"
-    }) 
-    console.log(history)
-    chrome.storage.session.set({ history: history })
-    return history
+    console.log('No history found in session storage');    
+    return []
   }
   
 }
