@@ -32,10 +32,12 @@ function createChatBubble(message, isUserMessage, isLoading = false) {
   chatMessage.classList.add('chat-message');
 
   const botProfileImg = document.createElement('img');
-  if(!isUserMessage) {
-    botProfileImg.src = "../images/botProfile.png";
+  // Adjusted condition to add profile image for bot messages and loading messages
+  if (!isUserMessage || isLoading) {
+    botProfileImg.src = "../images/botProfile.png"; // Make sure the path is correct
     botProfileImg.alt = "Profile Picture of Eppy the Chatbot";
     botProfileImg.classList.add('chat-profile');
+    chatMessage.appendChild(botProfileImg); // Append the profile image to the chatMessage
   }
   
   const messageBubble = document.createElement('div');
@@ -49,21 +51,15 @@ function createChatBubble(message, isUserMessage, isLoading = false) {
       </div>`; // For animation, include three span elements
   } else {
     chatMessage.classList.add(isUserMessage ? 'user-message' : 'eppy-message');
-    messageBubble.innerHTML = message;
+    messageBubble.textContent = message; // Changed to textContent for text security
   }
 
-  
-  if(!isUserMessage && !isLoading){
-    document.getElementById('chat-container').appendChild(botProfileImg);
-  }
-  chatMessage.appendChild(messageBubble);
+  chatMessage.appendChild(messageBubble); // Append the message bubble to the chatMessage
   document.getElementById('chat-container').appendChild(chatMessage);
   
   // Scroll to the bottom of the chat container
-  document.getElementById("chat-container").scrollTop = chatMessage.offsetTop;
+  document.getElementById("chat-container").scrollTop = document.getElementById("chat-container").scrollHeight;
 }
-
-
 
 
 function toggleLoadingMessage(show) {

@@ -76,9 +76,10 @@ body {
 
 .chat-profile {
   float: left;
-  max-width: 50px;
-  height: auto;
-  clip-path: circle(40%);
+  width: 50px; /* Adjust the width as necessary */
+  height: 50px; /* Adjust the height as necessary */
+  clip-path: circle(25px at 25px 25px); /* Creates a circle shape centered */
+  margin-right: 10px; /* Adjust the space between the profile image and message bubble */
 }
 
 .chat-message {
@@ -131,7 +132,6 @@ body {
   height: 0;
   border-style: solid;
   border-width: 10px;
-  align-self: flex-end; /* Position the tail at the end of the bubble */
 }
 
 .user-message .message-bubble:before {
@@ -142,33 +142,49 @@ body {
 }
 
 .eppy-message .message-bubble:before {
+  border-color: transparent #e6dfdf transparent transparent;
+  left: -10px; /* Adjust if necessary, but should typically be the negative value of the border-width */
+  top: 50%; /* Centers the tail vertically */
+  transform: translate(0, -50%) rotate(135deg); /* Adjusts for centering the tail */
+}
+
+.loading-message .chat-profile {
+  float: left;
+  max-width: 50px; /* adjust as necessary */
+  height: auto;
+  clip-path: circle(40%);
+  margin-right: 10px; /* Spacing between image and message */
+}
+
+/* Update the loading message bubble */
+.loading-message .message-bubble:before {
+  border-color: transparent #e6dfdf transparent transparent;
+  left: -10px; /* Adjust if necessary, but should typically be the negative value of the border-width */
+  top: 50%; /* Centers the tail vertically */
+  transform: translate(0, -50%) rotate(135deg); /* Adjusts for centering the tail */
+}
+
+/* Remove extra left margin when profile picture is present */
+.loading-message .chat-profile + .message-bubble {
+  margin-left: 5px; /* Adjust this to match the space between the profile image and the message bubble */
+}
+
+
+.loading-message .message-bubble:before {
   content: '';
   position: absolute;
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 10px;
-  border-color: transparent #e6dfdf transparent transparent; /* Adjust color for Gemini message */
-  left: -5px; /* Position the tail at the start of the bubble */
-  top: 15px; /* Adjust the position to start higher than prompt */
-  transform: rotate(135deg) translate(-50%, 50%); /* Rotate and translate the tail */
+  border-color: transparent #e6dfdf transparent transparent; /* Color should match the loading bubble color */
+  left: -5px; /* Position the tail on the left edge of the bubble */
+  top: 15px; /* Align the top of the tail with the other messages' tails */
+  transform: rotate(135deg) translate(-50%, 50%); /* Same rotation and translation as the eppy message tail */
 }
 
-/* Styling for the loading message bubble */
 .loading-message .message-bubble {
-  background-color: #e6dfdf; 
-  border-radius: 18px; 
-  padding: 10px 20px; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 70%; 
-  margin-left: 10px;
-  margin-right: auto;
-}
-
-.loading-message .message-bubble:before {
-  display: none;
+  background-color: #e6dfdf;
 }
 
 .typing-animation {
