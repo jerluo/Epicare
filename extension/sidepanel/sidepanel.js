@@ -134,8 +134,10 @@ async function gemini(message, operation) {
 
   // Show the loading message as a chat bubble
   toggleLoadingMessage(true);
-  // Set to history user message
-  chrome.runtime.sendMessage({action: "set-history", user: true, parts: message});
+  // Set to history user message if it's a chat
+  if (operation === "chat") {
+    chrome.runtime.sendMessage({action: "set-history", user: true, parts: message});
+  }
   
   console.log("sending history: " + JSON.stringify(history))
   try {
