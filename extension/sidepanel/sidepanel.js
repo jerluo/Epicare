@@ -7,10 +7,27 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       // This line creates the bolded font, increase font size, underlines and adds new lines after bullet points within the chat bubble
       const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong style="font-size: 20px;"><u>$1</u></strong>').replace(/- /g, '<br>- ');;
       
-      const formattedResponse = boldedResponse.replace(/<\/strong>/g, '</strong><br>');
+      //const formattedResponse = boldedResponse.replace(/<\/strong>/g, '</strong><br>');
       
       // Create chat bubble with the modified (bolded) response
-      createChatBubble(formattedResponse, false);
+      createChatBubble(boldedResponse, false);
+    });
+
+    document.getElementById('medical-advice-button').addEventListener('click', function () {
+      console.log("Medical Advice button clicked"); 
+      gemini("give medical advice from the visits notes" + message.data, 'summary').then(data => {
+        const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong style="font-size: 20px;"><u>$1</u></strong>').replace(/- /g, '<br>- ');;
+
+          createChatBubble(boldedResponse, false);
+      });
+    });
+
+    document.getElementById('summary-button').addEventListener('click', function () {
+      console.log(message.data); //similar to when popup is recognized as message (same functionality)
+      gemini("give a detailed summary of the visits notes" + message.data, 'summary').then(data => {
+          const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong style="font-size: 20px;"><u>$1</u></strong>').replace(/- /g, '<br>- ');;
+          createChatBubble(boldedResponse, false);
+      });
     });
   }
 });
@@ -166,28 +183,3 @@ async function gemini(message, operation) {
     toggleLoadingMessage(false);
   }
 }
-
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  // message intended for this script or not..
-  if (message.target === 'popup') {
-    console.log(message.data)
-document.getElementById('summary-button').addEventListener('click', function () {
-  console.log(message.data); //similar to when popup is recognized as message (same functionality)
-  gemini("give a detailed summary of the visits notes" + message.data, 'summary').then(data => {
-      createChatBubble(data.response, false);
-  });
-});
-  }});
-
-// Add event listener for 'Medical Advice' button click
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  // Check if the message is intended for this script
-  if (message.target === 'popup') {
-    console.log(message.data)
-document.getElementById('medical-advice-button').addEventListener('click', function () {
-  console.log("Medical Advice button clicked"); 
-  gemini("give medical advice from the visits notes" + message.data, 'summary').then(data => {
-      createChatBubble(data.response, false);
-  });
-});
-  }});
