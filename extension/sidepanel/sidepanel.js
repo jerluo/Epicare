@@ -3,11 +3,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.target === 'popup') {
     // Handle the received data
     console.log(message.data)
-    gemini(message.data, 'summary').then(data => {
-      // This line creates the bolded font within the chat bubble
-      const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong style="font-size: 18px;"><u>$1</u></strong>');
+    gemini("Can you summarize these notes in bullet points using a hephyn, so a common person can understand? Bold each main section: " + message.data, 'summary').then(data => {
+      // This line creates the bolded font, increase font size, underlines and adds new lines after bullet points within the chat bubble
+      const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong style="font-size: 20px;"><u>$1</u></strong>').replace(/- /g, '<br>- ');;
       
-      // This isn't needed for the new scrollable chatbubbles
       const formattedResponse = boldedResponse.replace(/<\/strong>/g, '</strong><br>');
       
       // Create chat bubble with the modified (bolded) response
@@ -15,17 +14,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     });
   }
 });
-
-
-
-// Function to decode HTML entities
-function decodeHtmlEntities(html) {
-    return html.replace(/&lt;/g, '<')
-               .replace(/&gt;/g, '>')
-               .replace(/&quot;/g, '"')
-               .replace(/&#039;/g, "'")
-               .replace(/&amp;/g, '&');
-}
 
 function createChatBubble(message, isUserMessage, isLoading = false) {
   const chatMessage = document.createElement('div');
