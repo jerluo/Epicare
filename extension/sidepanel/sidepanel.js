@@ -51,7 +51,7 @@ function createChatBubble(message, isUserMessage, isLoading = false) {
       </div>`; // For animation, include three span elements
   } else {
     chatMessage.classList.add(isUserMessage ? 'user-message' : 'eppy-message');
-    messageBubble.textContent = message; // Changed to textContent for text security
+    messageBubble.innerHTML = message;
   }
 
   chatMessage.appendChild(messageBubble); // Append the message bubble to the chatMessage

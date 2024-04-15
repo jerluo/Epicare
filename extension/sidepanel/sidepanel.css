@@ -98,15 +98,12 @@ body {
 
 .message-bubble {
   position: relative;
-  max-width: 70%;
   margin: 5px;
   padding: 10px;
   border-radius: 20px;
   color: #fff;
   background-color: #cf013b; /* Default background color */
-  display: flex;
   justify-content: center;
-  align-items: center;
   word-wrap: break-word;
   overflow-wrap: break-word;
   hyphens: auto;
