@@ -3,11 +3,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.target === 'popup') {
     // Handle the received data
     console.log(message.data)
-    gemini(message.data, 'summary').then(data => {
-      // This line creates the bolded font within the chat bubble
-      const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong style="font-size: 18px;"><u>$1</u></strong>');
+    gemini("Can you summarize these notes in bullet points using a hephyn, so a common person can understand? Bold each main section: " + message.data, 'summary').then(data => {
+      // This line creates the bolded font, increase font size, underlines and adds new lines after bullet points within the chat bubble
+      const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong style="font-size: 20px;"><u>$1</u></strong>').replace(/- /g, '<br>- ');;
       
-      // This isn't needed for the new scrollable chatbubbles
       const formattedResponse = boldedResponse.replace(/<\/strong>/g, '</strong><br>');
       
       // Create chat bubble with the modified (bolded) response
@@ -15,15 +14,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     });
   }
 });
-
-// Function to decode HTML entities
-function decodeHtmlEntities(html) {
-    return html.replace(/&lt;/g, '<')
-               .replace(/&gt;/g, '>')
-               .replace(/&quot;/g, '"')
-               .replace(/&#039;/g, "'")
-               .replace(/&amp;/g, '&');
-}
 
 function createChatBubble(message, isUserMessage, isLoading = false) {
   const chatMessage = document.createElement('div');
@@ -49,7 +39,7 @@ function createChatBubble(message, isUserMessage, isLoading = false) {
       </div>`; // For animation, include three span elements
   } else {
     chatMessage.classList.add(isUserMessage ? 'user-message' : 'eppy-message');
-    messageBubble.textContent = message; // Changed to textContent for text security
+    messageBubble.innerHTML = message;
   }
 
   chatMessage.appendChild(messageBubble); // Append the message bubble to the chatMessage
@@ -176,3 +166,28 @@ async function gemini(message, operation) {
     toggleLoadingMessage(false);
   }
 }
+
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  // message intended for this script or not..
+  if (message.target === 'popup') {
+    console.log(message.data)
+document.getElementById('summary-button').addEventListener('click', function () {
+  console.log(message.data); //similar to when popup is recognized as message (same functionality)
+  gemini("give a detailed summary of the visits notes" + message.data, 'summary').then(data => {
+      createChatBubble(data.response, false);
+  });
+});
+  }});
+
+// Add event listener for 'Medical Advice' button click
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  // Check if the message is intended for this script
+  if (message.target === 'popup') {
+    console.log(message.data)
+document.getElementById('medical-advice-button').addEventListener('click', function () {
+  console.log("Medical Advice button clicked"); 
+  gemini("give medical advice from the visits notes" + message.data, 'summary').then(data => {
+      createChatBubble(data.response, false);
+  });
+});
+  }});
