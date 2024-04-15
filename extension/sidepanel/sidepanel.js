@@ -149,3 +149,17 @@ async function gemini(message, operation) {
     toggleLoadingMessage(false);
   }
 }
+
+document.getElementById('summary-button').addEventListener('click', function () {
+  gemini("give a detailed summary of the visits notes", 'summary').then(data => {
+    createChatBubble(data.response, false);
+  });
+});
+
+// Add event listener for 'Medical Advice' button click
+document.getElementById('medical-advice-button').addEventListener('click', function () {
+  gemini("give medical advice from the visits notes", 'summary').then(data => {
+    createChatBubble(data.response, false);
+  });
+});
+
