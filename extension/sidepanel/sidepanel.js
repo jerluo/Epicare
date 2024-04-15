@@ -16,8 +16,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   }
 });
 
-
-
 // Function to decode HTML entities
 function decodeHtmlEntities(html) {
     return html.replace(/&lt;/g, '<')
@@ -81,6 +79,23 @@ input.addEventListener("keyup", function (event) {
   }
 });
 
+// increasing the input box height
+input.addEventListener("keyup", function (event) {
+  let style = window.getComputedStyle(input), 
+    height = style.getPropertyValue('height'),
+    width = style.getPropertyValue('width');
+  
+  let dHeight = ((input.value.length / (parseFloat(width) * 0.11))); // get number of lines
+  
+  console.log("height change test", input.value.length, width, height, dHeight);
+  
+  input.style.height = ((dHeight >= 1) ? (20 * dHeight.toFixed(0)) : (20 * dHeight.toFixed(2))) + "px";   
+  
+
+    // set minimum height to be 20 and max to be 80
+  console.log("height changed --> ", style.getPropertyValue('height'));
+});
+
 
 function handleSendButtonClick() {
   const messageInput = document.getElementById('message-input');
@@ -109,7 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   sendButton.addEventListener('click', handleSendButtonClick);
 
   const response = await chrome.runtime.sendMessage({action: "get-history"});
-  const history = response.history
+  const history = response.history;
 
   // Initial welcome message
   createChatBubble("Hi there! I'm Eppy, and I'm here to answer any questions you may have about your health. Let's chat!", false);
