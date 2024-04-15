@@ -215,3 +215,25 @@ body {
   0%, 100% { opacity: 0; }
   60% { opacity: 1; }
 }
+
+#suggestive-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+#suggestive-buttons button {
+  border: 2px solid #90aec1; /* Green outline */
+  border-radius: 20px; /* Rounded corners */
+  background-color: transparent; /* Transparent background */
+  color: #2f3a3c; /* Green text color */
+  padding: 15px 15px; /* Adjust padding as needed */
+  font-size: 12px; /* Adjust font size as needed */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#suggestive-buttons button:hover {
+  background-color: #cf013b; /* Green background on hover */
+  color: #fff; /* White text color on hover */
+}
