@@ -150,16 +150,27 @@ async function gemini(message, operation) {
   }
 }
 
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  // message intended for this script or not..
+  if (message.target === 'popup') {
+    console.log(message.data)
 document.getElementById('summary-button').addEventListener('click', function () {
-  gemini("give a detailed summary of the visits notes", 'summary').then(data => {
-    createChatBubble(data.response, false);
+  console.log(message.data); //similar to when popup is recognized as message (same functionality)
+  gemini("give a detailed summary of the visits notes" + message.data, 'summary').then(data => {
+      createChatBubble(data.response, false);
   });
 });
+  }});
 
 // Add event listener for 'Medical Advice' button click
+chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  // Check if the message is intended for this script
+  if (message.target === 'popup') {
+    console.log(message.data)
 document.getElementById('medical-advice-button').addEventListener('click', function () {
-  gemini("give medical advice from the visits notes", 'summary').then(data => {
-    createChatBubble(data.response, false);
+  console.log("Medical Advice button clicked"); 
+  gemini("give medical advice from the visits notes" + message.data, 'summary').then(data => {
+      createChatBubble(data.response, false);
   });
 });
-
+  }});
