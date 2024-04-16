@@ -43,7 +43,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     const newHistory = 
       {
         "role": person,
-        "parts": request.parts
+        "parts": request.parts,
+        "visible": !(request.parts === "ignore")
       }
 
     getHistory().then((history) => {

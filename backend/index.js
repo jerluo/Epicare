@@ -29,17 +29,15 @@ app.post('/api', async (req, res) => {
         return res.status(400).json({ error: 'Missing required parameters' });
     }
 
-    const summaryPrompt = "Can you succinctly summarize these notes by bolding each section and explaining the details in bullet point? Here is the notes: "
-    const chatPrompt = "You are chat bot named Eppy answering a question from a patient about a specific question pertaining to their health, answer succinctly and assume the patient is 5 : ";
+    const summaryPrompt = "Can you summarize these notes in bullet points using a hephyn, so a common person can understand? Bold each main section:  "
+    const chatPrompt = "You are chat bot named Eppy answering a question from a patient about a specific question pertaining to their health, answer succinctly and assume the patient does not have advanced medical knowledge : ";
 
     let response
     switch (operation) {
         case 'chat':
-          const chatPrompt = "You are chat bot named Eppy answering a question from a patient about a specific question pertaining to their health, answer succinctly and assume the patient is 5 : ";
           response = await gemini(chatPrompt + message, history);
           break;
         case 'summary':
-          const summaryPrompt = "Can you succinctly summarize these notes by bolding each section and explaining the details in bullet point? Here is the notes: ";
           response = await gemini(summaryPrompt + message, history);
           break;
         default:

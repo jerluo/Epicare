@@ -3,30 +3,23 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   if (message.target === 'popup') {
     // Handle the received data
     console.log(message.data)
-    gemini("Can you summarize these notes in bullet points using a hephyn, so a common person can understand? Bold each main section: " + message.data, 'summary').then(data => {
+    gemini(message.data, 'summary').then(data => {
       // This line creates the bolded font, increase font size, underlines and adds new lines after bullet points within the chat bubble
-      const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong style="font-size: 20px;"><u>$1</u></strong>').replace(/- /g, '<br>- ');;
-      
-      //const formattedResponse = boldedResponse.replace(/<\/strong>/g, '</strong><br>');
-      
       // Create chat bubble with the modified (bolded) response
-      createChatBubble(boldedResponse, false);
+      createChatBubble(data.response, false);
     });
 
     document.getElementById('medical-advice-button').addEventListener('click', function () {
       console.log("Medical Advice button clicked"); 
       gemini("give medical advice from the visits notes" + message.data, 'summary').then(data => {
-        const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong style="font-size: 20px;"><u>$1</u></strong>').replace(/- /g, '<br>- ');;
-
-          createChatBubble(boldedResponse, false);
+          createChatBubble(data.response, false);
       });
     });
 
     document.getElementById('summary-button').addEventListener('click', function () {
       console.log(message.data); //similar to when popup is recognized as message (same functionality)
       gemini("give a detailed summary of the visits notes" + message.data, 'summary').then(data => {
-          const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong style="font-size: 20px;"><u>$1</u></strong>').replace(/- /g, '<br>- ');;
-          createChatBubble(boldedResponse, false);
+          createChatBubble(data.response, false);
       });
     });
   }
@@ -56,7 +49,8 @@ function createChatBubble(message, isUserMessage, isLoading = false) {
       </div>`; // For animation, include three span elements
   } else {
     chatMessage.classList.add(isUserMessage ? 'user-message' : 'eppy-message');
-    messageBubble.innerHTML = message;
+    const boldedResponse = message.replace(/\*\*(.*?)\*\*/g, '<br><strong style="font-size: 20px;"><u>$1</u></strong>').replace(/- /g, '<br>- ');; 
+    messageBubble.innerHTML = boldedResponse;
   }
 
   chatMessage.appendChild(messageBubble); // Append the message bubble to the chatMessage
@@ -114,10 +108,8 @@ function handleSendButtonClick() {
 
     gemini(message, 'chat').then(data => {
       // Add a line break before each bold section
-      const boldedResponse = data.response.replace(/\*\*(.*?)\*\*/g, '<br><strong>$1</strong>');
-      const formattedResponse = boldedResponse.replace(/<\/strong>/g, '</strong><br>');
-      chrome.runtime.sendMessage({action: "set-history", user: false, parts: formattedResponse});
-      createChatBubble(formattedResponse, false);
+      chrome.runtime.sendMessage({action: "set-history", user: false, parts: data.response});
+      createChatBubble(data.response, false);
     });
 
     // Clear the message input
@@ -136,9 +128,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Initial welcome message
   createChatBubble("Hi there! I'm Eppy, and I'm here to answer any questions you may have about your health. Let's chat!", false);
 
-  history.forEach(({ role, parts }) => {
+  history.forEach(({ role, parts, visible }) => {
     const isUser = role === 'user';
-    createChatBubble(parts, isUser);
+    if (visible) {
+      createChatBubble(parts, isUser);
+    }
   });
 });
 
@@ -155,6 +149,8 @@ async function gemini(message, operation) {
   // Set to history user message if it's a chat
   if (operation === "chat") {
     chrome.runtime.sendMessage({action: "set-history", user: true, parts: message});
+  } else {
+    chrome.runtime.sendMessage({action: "set-history", user: true, parts: "ignore"});
   }
   
   console.log("sending history: " + JSON.stringify(history))
@@ -172,6 +168,7 @@ async function gemini(message, operation) {
     }
 
     const data = await response.json();
+    chrome.runtime.sendMessage({action: "set-history", user: false, parts: data.response});
     return data;
     
   } catch (error) {
