@@ -1,3 +1,5 @@
+const url = 'https://epicare.onrender.com/api';
+
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   // Check if the message is intended for this script
   if (message.target === 'popup') {
@@ -147,7 +149,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function gemini(message, operation) {
-  const url = 'https://epicare.onrender.com/api';
   const endpoint = url
   
   // Get current history

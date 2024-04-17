@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { GoogleGenerativeAI,
+    HarmCategory,
+    HarmBlockThreshold, } = require("@google/generative-ai");
 const dotenv = require('dotenv');
 
 // Set up express app
@@ -53,11 +55,38 @@ app.listen(port, () => {
 
 async function gemini(message, history) {
     console.log("prompting gemini")
-    console.log(history)
+    const generationConfig = {
+        temperature: 0.9,
+        topK: 1,
+        topP: 1,
+        maxOutputTokens: 2048,
+    };
+        
+    const safetySettings = [
+        {
+        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+        threshold: HarmBlockThreshold.BLOCK_NONE,
+        },
+        {
+        category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        threshold: HarmBlockThreshold.BLOCK_NONE,
+        },
+        {
+        category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+        threshold: HarmBlockThreshold.BLOCK_NONE,
+        },
+        {
+        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+        threshold: HarmBlockThreshold.BLOCK_NONE,
+        },
+    ];
+
     const model = genAI.getGenerativeModel({ model: "gemini-pro"});
     try {
         const chat = model.startChat({
-            history: history,
+            generationConfig,
+            safetySettings,
+            history,
         });
                 
         const result = await chat.sendMessage(message);
