@@ -1,5 +1,20 @@
 console.log("scrape script loaded");
 
+document.addEventListener('selectionchange', function() {
+    if (!document.hidden) {
+      let selectedText = window.getSelection().toString();
+
+      if (selectedText.trim() !== '') {
+        // User has started highlighting
+        chrome.runtime.sendMessage({ target: 'userHighlighted', text: selectedText });
+      } else {
+        // User has stopped highlighting
+        chrome.runtime.sendMessage({ target: 'userStoppedHighlighting' });
+        
+      }
+    }
+});
+  
 // Check if we are in notes tab
 const fmtConvElement = document.querySelector(".fmtConv");
 if (fmtConvElement) {

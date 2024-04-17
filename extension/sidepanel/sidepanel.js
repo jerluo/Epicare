@@ -7,22 +7,32 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       // This line creates the bolded font, increase font size, underlines and adds new lines after bullet points within the chat bubble
       // Create chat bubble with the modified (bolded) response
       createChatBubble(data.response, false);
-    });
-
-    document.getElementById('medical-advice-button').addEventListener('click', function () {
-      console.log("Medical Advice button clicked"); 
-      gemini("give medical advice from the visits notes" + message.data, 'summary').then(data => {
-          createChatBubble(data.response, false);
-      });
-    });
+    });    
 
     document.getElementById('summary-button').addEventListener('click', function () {
       console.log(message.data); //similar to when popup is recognized as message (same functionality)
-      gemini("give a detailed summary of the visits notes" + message.data, 'summary').then(data => {
+      gemini("From these after visit notes, what should I know about my health? " + message.data, 'summary').then(data => {
           createChatBubble(data.response, false);
       });
     });
   }
+
+  if (message.target === 'userHighlighted') {
+    // Set the highlighted text in the textarea
+    document.getElementById('message-input').value = message.text;
+  }
+
+  if (message.target === 'userStoppedHighlighting') {
+    // Set the highlighted text in the textarea
+    document.getElementById('message-input').value = '';
+  }
+});
+
+document.getElementById('medical-advice-button').addEventListener('click', function () {
+  console.log("Medical Advice button clicked"); 
+  gemini("Can you explain what this means in a medical setting: " + document.getElementById('message-input').value.trim(), 'chat').then(data => {
+      createChatBubble(data.response, false);
+  });
 });
 
 function createChatBubble(message, isUserMessage, isLoading = false) {
