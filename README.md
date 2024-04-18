@@ -31,7 +31,13 @@ There are 3 main ways to use the extension -
 
 ## What's Next
 
-TODO
+- Improve formatting for chatbot output
+- Improve security of chat messages
+- Allow access of mentors to the project
+- Further improve UI
+- Add accessibility features
+- Change AI providers to comply with HIPAA
+- Work on dynamic suggested buttons
 
 ## Acknowledgements
 
